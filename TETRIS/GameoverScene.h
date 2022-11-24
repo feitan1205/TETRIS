@@ -6,7 +6,12 @@ class GameoverScene :
 {
 public:
     GameoverScene(SceneManager& manager) : Scene(manager) {};
-    ~GameoverScene() {}
+    ~GameoverScene() {};
+
+    void Init() {};
+
+    void End() {};
+
     void Update(const InputState& input);
     void Draw();
 };

@@ -8,6 +8,16 @@ void SceneManager::ChangeScene(Scene* scene) {
 	scene_ = scene;
 }
 
+void SceneManager::Init() {
+	//scene_->Init();
+}
+
+void SceneManager::End() {
+
+	scene_->End();
+
+}
+
 void SceneManager::Update(const InputState& input) {
 	scene_->Update(input);
 }

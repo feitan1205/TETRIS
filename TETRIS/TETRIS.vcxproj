@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameoverScene.cpp" />
     <ClCompile Include="GameplayingScene.cpp" />
     <ClCompile Include="InputState.cpp" />
@@ -158,8 +160,11 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Field.h" />
+    <ClInclude Include="GameMain.h" />
     <ClInclude Include="GameoverScene.h" />
     <ClInclude Include="GameplayingScene.h" />
     <ClInclude Include="game.h" />
@@ -167,6 +172,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

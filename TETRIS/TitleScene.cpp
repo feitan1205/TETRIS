@@ -7,6 +7,7 @@
 void TitleScene::Update(const InputState& input) {
 	if (input.IsTriggered(InputType::next)) {
 		manager_.ChangeScene(new GameplayingScene(manager_));
+		manager_.Init();
 		return;
 	}
 }

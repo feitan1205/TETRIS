@@ -26,6 +26,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SceneManager sceneManager;
 	sceneManager.ChangeScene(new TitleScene(sceneManager));
 
+	sceneManager.Init();
 	
 	while (ProcessMessage() == 0)
 	{
@@ -48,6 +49,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
+	sceneManager.End();
 	
 
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
