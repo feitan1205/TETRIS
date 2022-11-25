@@ -6,10 +6,11 @@ void SceneManager::ChangeScene(Scene* scene) {
 		delete scene_;
 	}
 	scene_ = scene;
+
+	scene_->Init();
 }
 
 void SceneManager::Init() {
-	//scene_->Init();
 }
 
 void SceneManager::End() {

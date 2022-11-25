@@ -1,7 +1,8 @@
 #include "GameMain.h"
 
 
-GameMain::GameMain()	
+GameMain::GameMain()	:
+	m_field(nullptr)
 {
 	//ˆ—‚È‚µ
 }

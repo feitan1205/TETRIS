@@ -157,6 +157,7 @@
     <ClCompile Include="GameplayingScene.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="object.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="GameplayingScene.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="InputState.h" />
+    <ClInclude Include="object.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="TitleScene.h" />
