@@ -1,6 +1,9 @@
+#include <DxLib.h>
 #include "object.h"
 
-object::object()
+object::object():
+	objectnum(),
+	isMoveObject(false)
 {
 }
 
@@ -9,6 +12,8 @@ object::~object() {
 }
 
 void object::Init() {
+
+	objectnum = GetRand(SHAPE_MAX);
 
 }
 

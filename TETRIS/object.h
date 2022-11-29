@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vec2.h"
+
 namespace {
 	constexpr int SHAPE_HEIGHT_MAX = 4;
 	constexpr int SHAPE_WIDTH_MAX = 4;
@@ -19,7 +21,13 @@ public:
 	void Update();
 	void Draw();
 
+	bool GetIsMoveObject() { return isMoveObject; }
+
 private:
+
+	bool isMoveObject;
+
+	int objectnum;
 
 	enum {
 		SHAPE_T,
@@ -33,6 +41,7 @@ private:
 	};
 
 	typedef struct {
+		int Red, Green, Blue;
 		int width, height;
 		int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 	}SHAPE;
@@ -40,6 +49,8 @@ private:
 	SHAPE shapes[SHAPE_MAX] = {
 		//SHAPE_T,
 		{
+			//color
+			255,0,0,
 			//int width, height;
 			3,3,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -51,6 +62,8 @@ private:
 		},
 		//SHAPE_L,
 		{
+			//color
+			0,255,0,
 			//int width, height;
 			3,3,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -62,6 +75,8 @@ private:
 		},
 		//SHAPE_J,
 		{
+			//color
+			0,0,255,
 			//int width, height;
 			3,3,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -73,6 +88,8 @@ private:
 		},
 		//SHAPE_I,
 		{
+			//color
+			255,255,0,
 			//int width, height;
 			4,4,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -85,6 +102,8 @@ private:
 		},
 		//SHAPE_O,
 		{
+			//color
+			255,0,255,
 			//int width, height;
 			2,2,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -95,6 +114,8 @@ private:
 		},
 		//SHAPE_S,
 		{
+			//color
+			0,255,255,
 			//int width, height;
 			3,3,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -106,6 +127,8 @@ private:
 		},
 		//SHAPE_Z,
 		{
+			//color
+			0,0,0,
 			//int width, height;
 			3,3,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];

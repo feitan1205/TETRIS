@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "Field.h"
 #include "game.h"
+#include "object.h"
 
 namespace {
 
@@ -11,7 +12,8 @@ namespace {
 
 Field::Field() :
 	m_minfield(),
-	m_maxfield()
+	m_maxfield(),
+	m_pObject()
 {}
 
 Field::~Field()
@@ -19,16 +21,18 @@ Field::~Field()
 
 void Field::Init() {
 
+	m_pObject = new object();
+
 }
 void Field::End() {
 
-
+	m_pObject->End();
 
 }
 
 void Field::Update() {
 
-
+	m_pObject->Update();
 
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec2.h"
 
+class object;
 
 class Field
 {
@@ -20,6 +21,8 @@ private:
 
 	Vec2 m_minfield;
 	Vec2 m_maxfield;
+
+	object* m_pObject;
 
 };
 
