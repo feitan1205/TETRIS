@@ -1,7 +1,9 @@
 #pragma once
 
 enum class InputType {
-	next//次へ行くボタン
+	next,//次へ行くボタン
+	left,
+	right
 };
 
 class InputState

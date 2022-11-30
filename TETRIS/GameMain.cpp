@@ -46,17 +46,8 @@ void GameMain::Update() {
 
 	if (movespeed > 0)return;
 
-	for (int i = kfieldheight - 1; i >= 0; i--) {
-		for (int j = 0; j < kfieldwidth; j++) {
+	MoveBlock(0,1,0xff0000);
 
-			if (i == 21 || m_field[j][i+1].GetIsExist()) m_field[j][i].SetStop();
-
-			if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
-				m_field[j][i + 1].SetBlock(0xff0000);
-				m_field[j][i].DeleteExist();
-			}
-		}
-	}
 
 	movespeed = 1;
 }
@@ -66,6 +57,21 @@ void GameMain::Draw() {
 	for (int i = 0; i < kfieldheight; i++) {
 		for (int j = 0; j < kfieldwidth; j++) {
 			m_field[j][i].Draw(i,j);
+		}
+	}
+}
+
+void GameMain::MoveBlock(int x,int y,int color)
+{
+	for (int i = kfieldheight - 1; i >= 0; i--) {
+		for (int j = 0; j < kfieldwidth; j++) {
+
+			if (i == 21 || m_field[j][i + 1].GetIsExist()) m_field[j][i].SetStop();
+
+			if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
+				m_field[j + x][i + y].SetBlock(color);
+				m_field[j][i].DeleteExist();
+			}
 		}
 	}
 }
