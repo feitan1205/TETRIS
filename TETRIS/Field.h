@@ -13,16 +13,23 @@ public:
 	void Init();
 	void End();
 
+	void SetBlock(int color);
+	void DeleteExist();
+
 	void Update();
 
-	void Draw();
+	void Draw(int i,int j);
 
+	bool GetIsExist() { return isExistBlock; }
+	bool GetIsMove() { return isMoveBlock; }
+	bool GetIsMoved() { return isMovedBlock; }
+	void SetStop() { isMoveBlock = false; }
 private:
 
-	Vec2 m_minfield;
-	Vec2 m_maxfield;
-
-	object* m_pObject;
+	bool isExistBlock;
+	bool isMoveBlock;
+	bool isMovedBlock;
+	int blockColor;
 
 };
 

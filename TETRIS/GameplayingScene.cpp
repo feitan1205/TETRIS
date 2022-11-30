@@ -33,7 +33,7 @@ void GameplayingScene::Update(const InputState& input) {
 
 void GameplayingScene::Draw() {
 
-	DrawBox(0, 0,Game::kScreenWidth,Game::kScreenHeight, GetColor(150, 150, 150), true);
+	//DrawBox(0, 0,Game::kScreenWidth,Game::kScreenHeight, GetColor(150, 150, 150), true);
 
 	m_pgamemain->Draw();
 

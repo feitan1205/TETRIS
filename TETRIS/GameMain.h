@@ -17,6 +17,6 @@ public:
 
 private:
 
-	Field* m_field;
-
+	Field m_field[10][22];
+	float movespeed;
 };
