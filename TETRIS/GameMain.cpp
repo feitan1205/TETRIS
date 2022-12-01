@@ -54,7 +54,7 @@ void GameMain::Update(const InputState& input) {
 			}
 		}
 	}
-
+	 
 	if (stopflag) {
 		for (int i = 0; i < kfieldheight; i++) {
 			for (int j = 0; j < kfieldwidth; j++) {
