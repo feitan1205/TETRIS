@@ -13,15 +13,19 @@ public:
 	void Init();
 	void End();
 
-	void Update();
+	void Update(const InputState& input);
 
 	void Draw();
 
 	void MoveBlock(int x,int y,int color);
 
+	void CreatBlock(int x, int y, int color);
+
+	void ClearBlock(int y);
+
 private:
 
 	Field m_field[10][22];
 	float movespeed;
-	InputState input;
+	bool stopflag;
 };

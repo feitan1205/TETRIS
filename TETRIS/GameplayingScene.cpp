@@ -22,7 +22,7 @@ void GameplayingScene::End() {
 
 void GameplayingScene::Update(const InputState& input) {
 
-	m_pgamemain->Update();
+	m_pgamemain->Update(input);
 
 	if (input.IsTriggered(InputType::next)) {
 		manager_.ChangeScene(new GameoverScene(manager_));

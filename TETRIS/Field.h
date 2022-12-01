@@ -22,6 +22,7 @@ public:
 
 	bool GetIsExist() { return isExistBlock; }
 	bool GetIsMove() { return isMoveBlock; }
+	void SetIsMoved(bool flag) { isMovedBlock = flag; }
 	bool GetIsMoved() { return isMovedBlock; }
 	void SetStop() { isMoveBlock = false; }
 private:

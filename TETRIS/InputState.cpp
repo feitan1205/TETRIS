@@ -18,6 +18,9 @@ bool InputState::IsPressed(InputType type)const {
 	if (type == InputType::right) {
 		return lastKeystate[KEY_INPUT_RIGHT];
 	}
+	if (type == InputType::fast) {
+		return lastKeystate[KEY_INPUT_DOWN];
+	}
 	return false;
 }
 
@@ -33,6 +36,10 @@ bool InputState::IsTriggered(InputType type)const {
 	if (type == InputType::right) {
 		return !lastKeystate[KEY_INPUT_RIGHT] &&
 			keystate[KEY_INPUT_RIGHT];
+	}
+	if (type == InputType::fast) {
+		return !lastKeystate[KEY_INPUT_DOWN] &&
+			keystate[KEY_INPUT_DOWN];
 	}
 	return false;
 }
