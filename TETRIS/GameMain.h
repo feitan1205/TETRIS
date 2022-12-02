@@ -20,9 +20,10 @@ enum {
 };
 
 typedef struct {
+
 	int color;
-	int width, height;
 	int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
+
 }SHAPE;
 
 class GameMain {
@@ -45,7 +46,7 @@ public:
 
 	void JumpBlock(int color);
 
-	void CreatBlock(int x, int y, int color);
+	void CreatBlock(int color);
 
 	void ClearBlock(int y);
 

@@ -171,7 +171,6 @@
     <ClInclude Include="GameplayingScene.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="InputState.h" />
-    <ClInclude Include="object.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="TitleScene.h" />

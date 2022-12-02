@@ -5,13 +5,14 @@ namespace {
 
 	constexpr int kfieldheight = 22;
 	constexpr int kfieldwidth = 10;
-	constexpr float kspeed = 0.1;
+	constexpr float kspeed = 0.05f;
 }
 
 GameMain::GameMain()	:
 	m_field(),
 	movespeed(),
-	stopflag(false)
+	stopflag(false),
+	shapes()
 {
 	//ˆ—‚È‚µ
 }
@@ -23,15 +24,7 @@ void GameMain::Init() {
 	
 	SetObjectDate();
 
-	/*for (int i = 0; i < kfieldheight; i++) {
-		for (int j = 0; j < kfieldwidth; j++) {
-			m_field[j][i].Init();
-		}
-	}
-
-	m_field[5][0].SetBlock(0xff0000);*/
-
-	CreatBlock(0,5,0xff0000);
+	CreatBlock(0xff0000);
 
 	movespeed = 1;
 
@@ -90,7 +83,7 @@ void GameMain::Update(const InputState& input) {
 
 	MoveBlock(0,1,0xff0000);
 
-	//CreatBlock(5, 0, 0xff0000);
+	CreatBlock(0xff0000);
 
 
 
@@ -111,108 +104,95 @@ void GameMain::SetObjectDate()
 
 
 	shapes[SHAPE_T] = {
-		//SHAPE_T,
+	//SHAPE_T,
+		//color
+		0xff0000,
+		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 		{
-			//color
-			0xff0000,
-			//int width, height;
-			4,4,
-			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-			{
-				{0,0,0,0},
-				{0,1,1,1},
-				{0,0,1,0},
-				{0,0,0,0}
-			}
-		},
+			{0,0,0,0},
+			{0,1,1,1},
+			{0,0,1,0},
+			{0,0,0,0}
+		}
 	};
 
 	shapes[SHAPE_L] = {
-		//SHAPE_L,
+	//SHAPE_L
+		//color
+		0xff0000,
+		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 		{
-			//color
-			0xff0000,
-			//int width, height;
-			4,4,
-			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-			{
-				{0,0,0,0},
-				{0,1,0,0},
-				{0,1,0,0},
-				{0,1,1,0}
-			}
-		},
+			{0,0,0,0},
+			{0,1,0,0},
+			{0,1,0,0},
+			{0,1,1,0}
+		}	
 	};
-		//SHAPE_J,
+
+	shapes[SHAPE_J] = {
+	//SHAPE_J,
+	
+		//color
+		0xff0000,
+		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 		{
-			//color
-			0xff0000,
-			//int width, height;
-			4,4,
-			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-			{
-				{0,0,0,0},
-				{0,0,1,0},
-				{0,0,1,0},
-				{0,1,1,0}
-			}
-		},
-		//SHAPE_I,
+			{0,0,0,0},
+			{0,0,1,0},
+			{0,0,1,0},
+			{0,1,1,0}
+		}
+	};
+
+	shapes[SHAPE_I] = {
+	//SHAPE_I,
+		//color
+		0xff0000,
+		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 		{
-			//color
-			0xff0000,
-			//int width, height;
-			4,4,
-			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-			{
-				{0,0,0,0},
-				{1,1,1,1},
-				{0,0,0,0},
-				{0,0,0,0}
-			}
-		},
-		//SHAPE_O,
+			{0,0,0,0},
+			{1,1,1,1},
+			{0,0,0,0},
+			{0,0,0,0}
+		}
+	};
+
+	shapes[SHAPE_O] = {
+	//SHAPE_O,
+	//color
+		0xff0000,
+		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 		{
-			//color
-			0xff0000,
-			//int width, height;
-			4,4,
-			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-			{
-				{0,0,0,0},
-				{0,1,1,0},
-				{0,1,1,0},
-				{0,0,0,0}
-			}
-		},
-		//SHAPE_S,
+			{0,0,0,0},
+			{0,1,1,0},
+			{0,1,1,0},
+			{0,0,0,0}
+		}
+	};
+
+	shapes[SHAPE_S] = {
+	//SHAPE_S,
+	//color
+		0xff0000,
+		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 		{
-			//color
-			0xff0000,
-			//int width, height;
-			4,4,
-			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-			{
-				{0,0,0,0},
-				{0,0,1,1},
-				{0,1,1,0},
-				{0,0,0,0}
-			}
-		},
-		//SHAPE_Z,
+			{0,0,0,0},
+			{0,0,1,1},
+			{0,1,1,0},
+			{0,0,0,0}
+		}
+	};
+
+	shapes[SHAPE_Z] = {
+	//SHAPE_Z,
+	//color
+		0xff0000,
+		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 		{
-			//color
-			0xff0000,
-			//int width, height;
-			4,4,
-			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-			{
-				{0,0,0,0},
-				{0,1,1,0},
-				{0,0,1,1},
-				{0,0,0,0}
-			}
-		},
+			{0,0,0,0},
+			{0,1,1,0},
+			{0,0,1,1},
+			{0,0,0,0}
+		}
 	};
 }
 
@@ -235,7 +215,7 @@ void GameMain::MoveBlock(int x,int y,int color)
 			if (i == 21 || !(m_field[j][i].GetIsMove()))continue;
 
 
-			if (m_field[j][i + 1].GetIsExist()) {
+			if (m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove())) {
 				m_field[j][i].SetStop();
 				continue;
 			}
@@ -278,7 +258,7 @@ void GameMain::JumpBlock(int color)
 	}
 }
 
-void GameMain::CreatBlock(int x, int y, int color)
+void GameMain::CreatBlock(int color)
 {
 	
 	for (int i = 0; i < kfieldheight; i++) {
@@ -287,9 +267,15 @@ void GameMain::CreatBlock(int x, int y, int color)
 		}
 	}
 
+	int randShape = GetRand(SHAPE_MAX);
 
-
-	m_field[x][y].SetBlock(color);
+	for (int i = 0; i < SHAPE_HEIGHT_MAX; i++) {
+		for (int j = 0; j < SHAPE_WIDTH_MAX; j++) {
+			if (shapes[randShape].pattern[j][i] == 1) {
+				m_field[j + 3][i].SetBlock(color);
+			}
+		}
+	}
 
 }
 

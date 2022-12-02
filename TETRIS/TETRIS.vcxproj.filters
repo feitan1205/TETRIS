@@ -89,8 +89,5 @@
     <ClInclude Include="Vec2.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="object.h">
-      <Filter>ヘッダー ファイル\GameSystem</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

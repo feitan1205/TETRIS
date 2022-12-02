@@ -1,7 +1,6 @@
 #include <DxLib.h>
 #include "Field.h"
 #include "game.h"
-#include "object.h"
 
 
 Field::Field() :
