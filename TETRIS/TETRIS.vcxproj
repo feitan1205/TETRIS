@@ -159,7 +159,6 @@
     <ClCompile Include="GameplayingScene.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="object.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />

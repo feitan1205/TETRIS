@@ -4,7 +4,8 @@ enum class InputType {
 	next,//Ÿ‚Ös‚­ƒ{ƒ^ƒ“
 	left,
 	right,
-	fast
+	fast,
+	jump
 };
 
 class InputState
