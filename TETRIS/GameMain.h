@@ -43,6 +43,7 @@ public:
 	void SetObjectDate();
 
 	void MoveBlock(int x,int y,int color);
+	void RightMoveBlock(int x, int y, int color);
 
 	void JumpBlock(int color);
 

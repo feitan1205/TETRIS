@@ -70,7 +70,7 @@ void GameMain::Update(const InputState& input) {
 		MoveBlock(-1, 0, 0xff0000);
 	}
 	if (input.IsTriggered(InputType::right)) {
-		MoveBlock(1, 0, 0xff0000);
+		RightMoveBlock(1, 0, 0xff0000);
 	}
 
 	if (input.IsTriggered(InputType::jump)) {
@@ -210,7 +210,45 @@ void GameMain::MoveBlock(int x,int y,int color)
 
 			if (m_field[j][i].GetIsMoved())continue;
 
-			if (m_field[j][i].GetIsMove() && j + x < 0 || j + x == 10) continue;
+			if (m_field[j][i].GetIsMove() && j + x < 0 || j + x == 10) return;
+
+			if (i == 21 || !(m_field[j][i].GetIsMove()))continue;
+
+
+			if (m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove())) {
+				m_field[j][i].SetStop();
+				continue;
+			}
+
+			if (m_field[j + x][i + y].GetIsExist()) {
+				continue;
+			}
+
+			if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
+				m_field[j][i].SetStop();
+				m_field[j + x][i + y].SetBlock(color);
+				m_field[j + x][i + y].SetIsMoved(true);
+				m_field[j][i].DeleteExist();
+			}
+		}
+	}
+}
+
+void GameMain::RightMoveBlock(int x, int y, int color)
+{
+
+	for (int i = 0; i < kfieldheight; i++) {
+		for (int j = 0; j < kfieldwidth; j++) {
+			m_field[j][i].SetIsMoved(false);
+		}
+	}
+
+	for (int i = kfieldheight - 1; i >= 0; i--) {
+		for (int j = kfieldwidth - 1; j >= 0 ; j--) {
+
+			if (m_field[j][i].GetIsMoved())continue;
+
+			if (m_field[j][i].GetIsMove() && j + x < 0 || j + x == 10) return;
 
 			if (i == 21 || !(m_field[j][i].GetIsMove()))continue;
 
