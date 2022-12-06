@@ -40,6 +40,7 @@ void Field::Draw(int i,int j) {
 
 	if (isExistBlock) {
 		DrawBox(j * 16, i * 16, j * 16 + 16, i * 16 + 16, blockColor, isExistBlock);
+		DrawBox(j * 16, i * 16, j * 16 + 16, i * 16 + 16, GetColor(0, 0, 0), false);
 	}
 	else {
 		DrawBox(j * 16, i * 16, j * 16 + 16, i * 16 + 16, GetColor(255, 255, 255), isExistBlock);

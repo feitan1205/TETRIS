@@ -46,28 +46,33 @@ void GameMain::Update(const InputState& input) {
 	
 	for (int i = 0; i < kfieldheight; i++) {
 		for (int j = 0; j < kfieldwidth; j++) {
-			if (i == 21 && m_field[j][i].GetIsExist() && m_field[j][i].GetIsMove()) {
-				m_field[j][i].SetStop();
-				stopflag = true;
+			if (m_field[j][i].GetIsExist() && !(m_field[j][i].GetIsMove()))stopflag = true;
+			if (m_field[j][i].GetIsExist() && m_field[j][i].GetIsMove()) {
+				stopflag = false;
+				break;
 			}
 		}
+		if (!stopflag)break;
 	}
 	 
 	if (stopflag) {
-		for (int i = 0; i < kfieldheight; i++) {
+		for (int i = kfieldheight - 1 ; i >= 0; i--) {
 			for (int j = 0; j < kfieldwidth; j++) {
 				if (!(m_field[j][i].GetIsExist()))break;
 				
 				if (j == 9) {
 					ClearBlock(i);
 				}
+				continue;
 			}
 		}
 		stopflag = false;
 	}
 
+	CreatBlock(0xff0000);
+
 	if (input.IsTriggered(InputType::left)) {
-		MoveBlock(-1, 0, 0xff0000);
+		LeftMoveBlock(-1, 0, 0xff0000);
 	}
 	if (input.IsTriggered(InputType::right)) {
 		RightMoveBlock(1, 0, 0xff0000);
@@ -81,11 +86,7 @@ void GameMain::Update(const InputState& input) {
 		if (movespeed > 0)return;
 	}
 
-	MoveBlock(0,1,0xff0000);
-
-	CreatBlock(0xff0000);
-
-
+	DownMoveBlock(0,1,0xff0000);
 
 	movespeed = 1;
 }
@@ -196,7 +197,58 @@ void GameMain::SetObjectDate()
 	};
 }
 
-void GameMain::MoveBlock(int x,int y,int color)
+void GameMain::DownMoveBlock(int x, int y, int color)
+{
+
+	for (int i = 0; i < kfieldheight; i++) {
+		for (int j = 0; j < kfieldwidth; j++) {
+			m_field[j][i].SetIsMoved(false);
+		}
+	}
+
+	bool isMoveShape = false;
+	int count = 0;
+
+	for (int i = kfieldheight - 1; i >= 0; i--) {
+		for (int j = 0; j < kfieldwidth; j++) {
+
+			if (!(m_field[j][i].GetIsMove()))continue;
+
+			if (i + 1 != 22 && m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove()))continue;
+
+			if (i + 1 == 22)continue;
+
+			count++;
+
+			if (count == 4) {
+				isMoveShape = true;
+			}
+		}
+	}
+
+	if (count < 4) {
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = 0; j < kfieldwidth; j++) {
+					m_field[j][i].SetStop();
+			}
+		}
+	}
+
+	if (count == 4) {
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = 0; j < kfieldwidth; j++) {
+				if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
+					m_field[j][i].SetStop();
+					m_field[j + x][i + y].SetBlock(color);
+					m_field[j + x][i + y].SetIsMoved(true);
+					m_field[j][i].DeleteExist();
+				}
+			}
+		}
+	}
+}
+
+void GameMain::LeftMoveBlock(int x,int y,int color)
 {	
 
 	for (int i = 0; i < kfieldheight; i++) {
@@ -205,30 +257,35 @@ void GameMain::MoveBlock(int x,int y,int color)
 		}
 	}
 
-	for (int i = kfieldheight - 1; i >= 0; i--) {
-		for (int j = 0; j < kfieldwidth; j++) {
+	bool isMoveShape = false;
+	int count = 0;
 
-			if (m_field[j][i].GetIsMoved())continue;
+	for (int j = 0; j < kfieldwidth; j++) {
+		for (int i = kfieldheight - 1; i >= 0; i--) {
 
-			if (m_field[j][i].GetIsMove() && j + x < 0 || j + x == 10) return;
+			if (!(m_field[j][i].GetIsMove()))continue;
 
-			if (i == 21 || !(m_field[j][i].GetIsMove()))continue;
+			if (j - 1 != -1 && m_field[j - 1][i].GetIsExist() && !(m_field[j - 1][i].GetIsMove()))continue;
 
+			if (j - 1 == -1)continue;
 
-			if (m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove())) {
-				m_field[j][i].SetStop();
-				continue;
+			count++;
+
+			if (count == 4) {
+				isMoveShape = true;
 			}
+		}
+	}
 
-			if (m_field[j + x][i + y].GetIsExist()) {
-				continue;
-			}
-
-			if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
-				m_field[j][i].SetStop();
-				m_field[j + x][i + y].SetBlock(color);
-				m_field[j + x][i + y].SetIsMoved(true);
-				m_field[j][i].DeleteExist();
+	if (count == 4) {
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = 0; j < kfieldwidth; j++) {
+				if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
+					m_field[j][i].SetStop();
+					m_field[j + x][i + y].SetBlock(color);
+					m_field[j + x][i + y].SetIsMoved(true);
+					m_field[j][i].DeleteExist();
+				}
 			}
 		}
 	}
@@ -243,30 +300,35 @@ void GameMain::RightMoveBlock(int x, int y, int color)
 		}
 	}
 
-	for (int i = kfieldheight - 1; i >= 0; i--) {
-		for (int j = kfieldwidth - 1; j >= 0 ; j--) {
+	bool isMoveShape = false;
+	int count = 0;
 
-			if (m_field[j][i].GetIsMoved())continue;
+	for (int j = kfieldwidth - 1; j >= 0; j--) {
+		for (int i = kfieldheight - 1; i >= 0; i--) {
 
-			if (m_field[j][i].GetIsMove() && j + x < 0 || j + x == 10) return;
+			if (!(m_field[j][i].GetIsMove()))continue;
 
-			if (i == 21 || !(m_field[j][i].GetIsMove()))continue;
+			if (j + 1 != 10 && m_field[j + 1][i].GetIsExist() && !(m_field[j + 1][i].GetIsMove()))continue;
 
+			if (j + 1 == 10)continue;
 
-			if (m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove())) {
-				m_field[j][i].SetStop();
-				continue;
+			count++;
+
+			if (count == 4) {
+				isMoveShape = true;
 			}
+		}
+	}
 
-			if (m_field[j + x][i + y].GetIsExist()) {
-				continue;
-			}
-
-			if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
-				m_field[j][i].SetStop();
-				m_field[j + x][i + y].SetBlock(color);
-				m_field[j + x][i + y].SetIsMoved(true);
-				m_field[j][i].DeleteExist();
+	if (count == 4) {
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = kfieldwidth - 1; j >= 0; j--) {
+				if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
+					m_field[j][i].SetStop();
+					m_field[j + x][i + y].SetBlock(color);
+					m_field[j + x][i + y].SetIsMoved(true);
+					m_field[j][i].DeleteExist();
+				}
 			}
 		}
 	}
@@ -274,22 +336,54 @@ void GameMain::RightMoveBlock(int x, int y, int color)
 
 void GameMain::JumpBlock(int color)
 {
-	for (int i = kfieldheight - 1; i >= 0; i--) {
-		for (int j = 0; j < kfieldwidth; j++) {
-			if (m_field[j][i].GetIsMove()) {
-				for (int k = i + 1; k < kfieldheight; k++) {
+	bool isMoveShape = false;
+	int count = 4;
 
-					if (m_field[j][k].GetIsExist()) {
-						m_field[j][k - 1].SetBlock(color);
-						m_field[j][i].DeleteExist();
-						m_field[j][i].SetStop();
-					}
-					else if (k == kfieldheight - 1) {
-						m_field[j][k].SetBlock(color);
-						m_field[j][i].DeleteExist();
-						m_field[j][i].SetStop();
-					}
+	while (count == 4) {
 
+		isMoveShape = false;
+		count = 0;
+
+		for (int i = 0; i < kfieldheight; i++) {
+			for (int j = 0; j < kfieldwidth; j++) {
+				m_field[j][i].SetIsMoved(false);
+			}
+		}
+
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = 0; j < kfieldwidth; j++) {
+
+				if (!(m_field[j][i].GetIsMove()))continue;
+
+				if (i + 1 != 22 && m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove()))continue;
+
+				if (i + 1 == 22)continue;
+
+				count++;
+
+				if (count == 4) {
+					isMoveShape = true;
+				}
+			}
+		}
+
+		if (count < 4) {
+			for (int i = kfieldheight - 1; i >= 0; i--) {
+				for (int j = 0; j < kfieldwidth; j++) {
+					m_field[j][i].SetStop();
+				}
+			}
+		}
+
+		if (count == 4) {
+			for (int i = kfieldheight - 1; i >= 0; i--) {
+				for (int j = 0; j < kfieldwidth; j++) {
+					if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
+						m_field[j][i].SetStop();
+						m_field[j][i + 1].SetBlock(color);
+						m_field[j][i + 1].SetIsMoved(true);
+						m_field[j][i].DeleteExist();
+					}
 				}
 			}
 		}
