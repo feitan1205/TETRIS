@@ -22,7 +22,8 @@ enum {
 typedef struct {
 
 	int color;
-	int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
+	int height, width;
+	int pattern[SHAPE_WIDTH_MAX][SHAPE_WIDTH_MAX];
 
 }SHAPE;
 
@@ -48,7 +49,7 @@ public:
 
 	void JumpBlock(int color);
 
-	void CreatBlock(int color);
+	void CreatBlock();
 
 	void ClearBlock(int y);
 
@@ -58,5 +59,5 @@ private:
 	SHAPE shapes[SHAPE_MAX];
 	float movespeed;
 	bool stopflag;
-
+	int randShape;
 };

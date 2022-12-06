@@ -22,7 +22,7 @@ bool InputState::IsPressed(InputType type)const {
 		return lastKeystate[KEY_INPUT_DOWN];
 	}
 	if (type == InputType::jump) {
-		return lastKeystate[KEY_INPUT_UP];
+		return lastKeystate[KEY_INPUT_SPACE];
 	}
 	return false;
 }
@@ -45,8 +45,8 @@ bool InputState::IsTriggered(InputType type)const {
 			keystate[KEY_INPUT_DOWN];
 	}
 	if (type == InputType::jump) {
-		return !lastKeystate[KEY_INPUT_UP] &&
-			keystate[KEY_INPUT_UP];
+		return !lastKeystate[KEY_INPUT_SPACE] &&
+			keystate[KEY_INPUT_SPACE];
 	}
 	return false;
 }

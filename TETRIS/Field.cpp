@@ -20,16 +20,18 @@ void Field::End() {
 
 }
 
-void Field::SetBlock(int color)
+void Field::SetBlock(bool flag,int color)
 {
 	isExistBlock = true;
-	isMoveBlock = true;
+	isMoveBlock = flag;
 	blockColor = color;
 }
 
 void Field::DeleteExist()
 {
 	isExistBlock = false;
+	isMoveBlock = false;
+	isMovedBlock = false;
 }
 
 void Field::Update() {

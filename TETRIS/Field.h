@@ -13,7 +13,7 @@ public:
 	void Init();
 	void End();
 
-	void SetBlock(int color);
+	void SetBlock(bool flag,int color);
 	void DeleteExist();
 
 	void Update();
