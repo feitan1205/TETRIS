@@ -53,6 +53,10 @@ public:
 
 	void ClearBlock(int y);
 
+	void CheckRanding();
+
+	bool GetGameOver() { return isGameOverFlag; }
+
 private:
 
 	Field m_field[10][22];
@@ -60,4 +64,5 @@ private:
 	float movespeed;
 	bool stopflag;
 	int randShape;
+	bool isGameOverFlag;
 };

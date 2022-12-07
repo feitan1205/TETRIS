@@ -24,6 +24,12 @@ void GameplayingScene::Update(const InputState& input) {
 
 	m_pgamemain->Update(input);
 
+	if (m_pgamemain->GetGameOver()) {
+		manager_.ChangeScene(new GameoverScene(manager_));
+		manager_.Init();
+		return;
+	}
+
 	if (input.IsTriggered(InputType::next)) {
 		manager_.ChangeScene(new GameoverScene(manager_));
 		manager_.Init();

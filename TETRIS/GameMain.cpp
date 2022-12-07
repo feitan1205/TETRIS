@@ -12,7 +12,9 @@ GameMain::GameMain()	:
 	m_field(),
 	movespeed(),
 	stopflag(false),
-	shapes()
+	shapes(),
+	randShape(),
+	isGameOverFlag(false)
 {
 	//ˆ—‚È‚µ
 }
@@ -43,8 +45,15 @@ void GameMain::End() {
 void GameMain::Update(const InputState& input) {
 
 	movespeed -= kspeed;
-	 
+	
+	CheckRanding();
+
 	if (stopflag) {
+
+		if (m_field[4][0].GetIsExist()) {
+			isGameOverFlag = true;
+		}
+
 		for (int i = kfieldheight - 1 ; i >= 0; i--) {
 			for (int j = 0; j < kfieldwidth; j++) {
 				if (!(m_field[j][i].GetIsExist()))break;
@@ -58,7 +67,7 @@ void GameMain::Update(const InputState& input) {
 		stopflag = false;
 	}
 
-	CreatBlock();
+	CreatBlock();	
 
 	if (input.IsTriggered(InputType::left)) {
 		LeftMoveBlock(-1, 0, 0xff0000);
@@ -71,13 +80,16 @@ void GameMain::Update(const InputState& input) {
 		JumpBlock(0xff0000);
 	}
 
-	if (!(input.IsPressed(InputType::fast))) {
-		if (movespeed > 0)return;
+	if (input.IsPressed(InputType::fast)) {
+		DownMoveBlock(0, 1, 0xff0000);
 	}
-
-	DownMoveBlock(0,1,0xff0000);
-
-	movespeed = 1;
+	else if (!input.IsPressed(InputType::fast)) {
+		if (movespeed < 0) {
+			DownMoveBlock(0, 1, 0xff0000);
+			movespeed = 1;
+		}
+	}
+	
 }
 
 void GameMain::Draw() {
@@ -194,52 +206,16 @@ void GameMain::SetObjectDate()
 
 void GameMain::DownMoveBlock(int x, int y, int color)
 {
-
-	for (int i = 0; i < kfieldheight; i++) {
-		for (int j = 0; j < kfieldwidth; j++) {
-			m_field[j][i].SetIsMoved(false);
-		}
-	}
-
-	bool isMoveShape = false;
-	int count = 0;
-
 	for (int i = kfieldheight - 1; i >= 0; i--) {
 		for (int j = 0; j < kfieldwidth; j++) {
 
-			if (!(m_field[j][i].GetIsMove()))continue;
-
-			if (i + 1 != 22 && m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove()))continue;
-
-			if (i + 1 == 22)continue;
-
-			count++;
-
-			if (count == 4) {
-				isMoveShape = true;
+			if (m_field[j][i].GetIsMove()) {
+				m_field[j][i].SetStop();
+				m_field[j + x][i + y].SetBlock(true, color);
+				m_field[j + x][i + y].SetIsMoved(true);
+				m_field[j][i].DeleteExist();
 			}
-		}
-	}
-
-	if (count < 4) {
-		for (int i = kfieldheight - 1; i >= 0; i--) {
-			for (int j = 0; j < kfieldwidth; j++) {
-					m_field[j][i].SetStop();
-					stopflag = true;
-			}
-		}
-	}
-
-	if (count == 4) {
-		for (int i = kfieldheight - 1; i >= 0; i--) {
-			for (int j = 0; j < kfieldwidth; j++) {
-				if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
-					m_field[j][i].SetStop();
-					m_field[j + x][i + y].SetBlock(true,color);
-					m_field[j + x][i + y].SetIsMoved(true);
-					m_field[j][i].DeleteExist();
-				}
-			}
+			
 		}
 	}
 }
@@ -271,6 +247,10 @@ void GameMain::LeftMoveBlock(int x,int y,int color)
 				isMoveShape = true;
 			}
 		}
+	}
+
+	if (count < 4) {
+		return;
 	}
 
 	if (count == 4) {
@@ -316,6 +296,10 @@ void GameMain::RightMoveBlock(int x, int y, int color)
 		}
 	}
 
+	if (count < 4) {
+		return;
+	}
+
 	if (count == 4) {
 		for (int i = kfieldheight - 1; i >= 0; i--) {
 			for (int j = kfieldwidth - 1; j >= 0; j--) {
@@ -332,58 +316,27 @@ void GameMain::RightMoveBlock(int x, int y, int color)
 
 void GameMain::JumpBlock(int color)
 {
-	bool isMoveShape = false;
-	int count = 4;
+	bool isMoveShape = true;	
 
-	while (count == 4) {
-
+	while (isMoveShape) {
 		isMoveShape = false;
-		count = 0;
-
 		for (int i = 0; i < kfieldheight; i++) {
 			for (int j = 0; j < kfieldwidth; j++) {
 				m_field[j][i].SetIsMoved(false);
 			}
 		}
-
 		for (int i = kfieldheight - 1; i >= 0; i--) {
 			for (int j = 0; j < kfieldwidth; j++) {
-
-				if (!(m_field[j][i].GetIsMove()))continue;
-
-				if (i + 1 != 22 && m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove()))continue;
-
-				if (i + 1 == 22)continue;
-
-				count++;
-
-				if (count == 4) {
+				if (i != 21 && m_field[j][i].GetIsMove()) {
+					m_field[j][i].SetStop();
+					m_field[j][i + 1].SetBlock(true, color);
+					m_field[j][i + 1].SetIsMoved(true);
+					m_field[j][i].DeleteExist();
 					isMoveShape = true;
 				}
 			}
 		}
-
-		if (count < 4) {
-			for (int i = kfieldheight - 1; i >= 0; i--) {
-				for (int j = 0; j < kfieldwidth; j++) {
-					m_field[j][i].SetStop();
-					stopflag = true;
-				}
-			}
-		}
-
-		if (count == 4) {
-			for (int i = kfieldheight - 1; i >= 0; i--) {
-				for (int j = 0; j < kfieldwidth; j++) {
-					if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
-						m_field[j][i].SetStop();
-						m_field[j][i + 1].SetBlock(true,color);
-						m_field[j][i + 1].SetIsMoved(true);
-						m_field[j][i].DeleteExist();
-					}
-				}
-			}
-		}
+		CheckRanding();
 	}
 }
 
@@ -443,4 +396,28 @@ void GameMain::ClearBlock(int y)
 			}
 		}
 	}
+}
+
+void GameMain::CheckRanding()
+{
+
+	for (int i = kfieldheight - 1; i >= 0; i--) {
+		for (int j = 0; j < kfieldwidth; j++) {
+			if (m_field[j][i].GetIsMove() && i == 21) {
+				stopflag = true;
+			}
+			if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove())) {
+				stopflag = true;
+			}
+		}
+	}
+
+	if (stopflag) {
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = 0; j < kfieldwidth; j++) {
+				m_field[j][i].SetStop();
+			}
+		}
+	}
+
 }
