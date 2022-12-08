@@ -32,7 +32,7 @@ private:
 
 public:
 
-	ShapeData shapes[SHAPE_MAX];
+	ShapeData shapes[SHAPE_MAX][4];
 
 	Shape();
 	~Shape();

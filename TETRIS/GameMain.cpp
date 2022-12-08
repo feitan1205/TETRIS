@@ -13,6 +13,7 @@ GameMain::GameMain()	:
 	m_field(),
 	m_movespeed(),
 	m_shape(nullptr),
+	m_moveShape(nullptr),
 	m_stopflag(false),
 	m_randShape(),
 	m_isGameOverFlag(false)
@@ -241,6 +242,9 @@ void GameMain::JumpBlock(int color)
 
 void GameMain::CreatBlock()
 {
+	m_randShape = GetRand(SHAPE_MAX);
+
+	m_moveShape = &m_shape->shapes[m_randShape][0];
 
 }
 
