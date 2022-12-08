@@ -32,7 +32,9 @@ void GameMain::Init() {
 
 	m_shape = new Shape();
 
+	m_moveShape = new ShapeData;
 
+	m_shape->SetShapeData();
 
 }
 
@@ -242,9 +244,9 @@ void GameMain::JumpBlock(int color)
 
 void GameMain::CreatBlock()
 {
-	m_randShape = GetRand(SHAPE_MAX);
+	//m_randShape = GetRand(SHAPE_MAX);
 
-	m_moveShape = &m_shape->shapes[m_randShape][0];
+	m_moveShape = m_shape->GetShape();
 
 }
 

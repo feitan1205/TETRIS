@@ -28,11 +28,11 @@ class Shape
 {
 private:
 
+	ShapeData shapes[SHAPE_MAX][4];
+	
 	int randShape;
 
 public:
-
-	ShapeData shapes[SHAPE_MAX][4];
 
 	Shape();
 	~Shape();
@@ -41,5 +41,6 @@ public:
 
 	void CreatShape();
 
+	ShapeData GetShape() { return shapes[randShape][0]; }
 };
 
