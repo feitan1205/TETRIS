@@ -57,8 +57,8 @@
     <ClCompile Include="Vec2.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="object.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Shape.cpp">
+      <Filter>ソース ファイル\GameSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,8 +92,8 @@
     <ClInclude Include="Vec2.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="object.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Shape.h">
+      <Filter>ヘッダー ファイル\GameSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

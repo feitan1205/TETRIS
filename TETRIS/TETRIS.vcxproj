@@ -159,9 +159,9 @@
     <ClCompile Include="GameplayingScene.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="object.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Vec2.cpp" />
   </ItemGroup>
@@ -172,9 +172,9 @@
     <ClInclude Include="GameplayingScene.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="InputState.h" />
-    <ClInclude Include="object.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>

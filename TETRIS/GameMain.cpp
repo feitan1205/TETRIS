@@ -1,5 +1,6 @@
 #include "GameMain.h"
 #include "InputState.h"
+#include "Shape.h"
 
 namespace {
 
@@ -10,11 +11,11 @@ namespace {
 
 GameMain::GameMain()	:
 	m_field(),
-	movespeed(),
-	stopflag(false),
-	shapes(),
-	randShape(),
-	isGameOverFlag(false)
+	m_movespeed(),
+	m_shape(nullptr),
+	m_stopflag(false),
+	m_randShape(),
+	m_isGameOverFlag(false)
 {
 	//ˆ—‚È‚µ
 }
@@ -24,11 +25,13 @@ GameMain::~GameMain()
 
 void GameMain::Init() {
 	
-	SetObjectDate();
-
 	CreatBlock();
 
-	movespeed = 1;
+	m_movespeed = 1;
+
+	m_shape = new Shape();
+
+
 
 }
 
@@ -44,14 +47,14 @@ void GameMain::End() {
 
 void GameMain::Update(const InputState& input) {
 
-	movespeed -= kspeed;
+	m_movespeed -= kspeed;
 	
 	CheckRanding();
 
-	if (stopflag) {
+	if (m_stopflag) {
 
 		if (m_field[4][0].GetIsExist()) {
-			isGameOverFlag = true;
+			m_isGameOverFlag = true;
 		}
 
 		for (int i = kfieldheight - 1 ; i >= 0; i--) {
@@ -64,7 +67,7 @@ void GameMain::Update(const InputState& input) {
 				continue;
 			}
 		}
-		stopflag = false;
+		m_stopflag = false;
 	}
 
 	CreatBlock();	
@@ -84,9 +87,9 @@ void GameMain::Update(const InputState& input) {
 		DownMoveBlock(0, 1, 0xff0000);
 	}
 	else if (!input.IsPressed(InputType::fast)) {
-		if (movespeed < 0) {
+		if (m_movespeed < 0) {
 			DownMoveBlock(0, 1, 0xff0000);
-			movespeed = 1;
+			m_movespeed = 1;
 		}
 	}
 	
@@ -101,109 +104,6 @@ void GameMain::Draw() {
 	}
 }
 
-void GameMain::SetObjectDate()
-{
-
-	shapes[SHAPE_T] = {
-	//SHAPE_T,
-		//color
-		0xff0000,
-		//height,width
-		3,3,
-		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-		{
-			{0,0,0},
-			{1,1,1},
-			{0,1,0}			
-		}
-	};
-
-	shapes[SHAPE_L] = {
-	//SHAPE_L
-		//color
-		0xff0000,
-		//height,width
-		3,3,
-		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-		{
-			{0,1,0},
-			{0,1,0},
-			{0,1,1}
-		}	
-	};
-
-	shapes[SHAPE_J] = {
-	//SHAPE_J,
-	
-		//color
-		0xff0000,
-		//height,width
-		3,3,
-		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-		{
-			{0,1,0},
-			{0,1,0},
-			{1,1,0}
-		}
-	};
-
-	shapes[SHAPE_I] = {
-	//SHAPE_I,
-		//color
-		0xff0000,
-		//height,width
-		4,4,
-		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-		{
-			{0,0,0,0},
-			{1,1,1,1},
-			{0,0,0,0},
-			{0,0,0,0}
-		}
-	};
-
-	shapes[SHAPE_O] = {
-	//SHAPE_O,
-	//color
-		0xff0000,
-		//height,width
-		2,2,
-		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-		{
-			{1,1},
-			{1,1}			
-		}
-	};
-
-	shapes[SHAPE_S] = {
-	//SHAPE_S,
-	//color
-		0xff0000,
-		//height,width
-		3,3,
-		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-		{
-			{0,1,1},
-			{1,1,0},
-			{0,0,0}
-		}
-	};
-
-	shapes[SHAPE_Z] = {
-	//SHAPE_Z,
-		//color
-		0xff0000,
-		//height,width
-		3,3,
-		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
-		{
-			{1,1,0},
-			{0,1,1},
-			{0,0,0},
-		}
-	};
-}
-
 void GameMain::DownMoveBlock(int x, int y, int color)
 {
 	for (int i = kfieldheight - 1; i >= 0; i--) {
@@ -214,8 +114,7 @@ void GameMain::DownMoveBlock(int x, int y, int color)
 				m_field[j + x][i + y].SetBlock(true, color);
 				m_field[j + x][i + y].SetIsMoved(true);
 				m_field[j][i].DeleteExist();
-			}
-			
+			}			
 		}
 	}
 }
@@ -342,41 +241,6 @@ void GameMain::JumpBlock(int color)
 
 void GameMain::CreatBlock()
 {
-	
-	for (int i = 0; i < kfieldheight; i++) {
-		for (int j = 0; j < kfieldwidth; j++) {
-			if (m_field[j][i].GetIsMove())return;
-		}
-	}
-
-	randShape = GetRand(SHAPE_MAX);
-	bool exist = false;
-	int k = 0;
-
-	for (int i = 0; i < shapes[randShape].height; i++) {
-
-		if (i == 0) {
-			for (int j = 0; j < shapes[randShape].width; j++) {
-				if (shapes[randShape].pattern[i][j] == 1) {
-					exist = true;
-				}
-			}
-		}
-
-		for (int j = 0; j < shapes[randShape].width; j++) {
-
-			if (shapes[randShape].pattern[i][j] == 1 && exist) {
-				m_field[j + 3][i].SetBlock(true, shapes[randShape].color);
-			}
-			else if (shapes[randShape].pattern[i][j] == 1 && !exist) {
-				m_field[j + 3][i - 1].SetBlock(true, shapes[randShape].color);
-			}
-
-		}
-		
-		exist = true;
-
-	}
 
 }
 
@@ -404,15 +268,15 @@ void GameMain::CheckRanding()
 	for (int i = kfieldheight - 1; i >= 0; i--) {
 		for (int j = 0; j < kfieldwidth; j++) {
 			if (m_field[j][i].GetIsMove() && i == 21) {
-				stopflag = true;
+				m_stopflag = true;
 			}
 			if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i + 1].GetIsExist() && !(m_field[j][i + 1].GetIsMove())) {
-				stopflag = true;
+				m_stopflag = true;
 			}
 		}
 	}
 
-	if (stopflag) {
+	if (m_stopflag) {
 		for (int i = kfieldheight - 1; i >= 0; i--) {
 			for (int j = 0; j < kfieldwidth; j++) {
 				m_field[j][i].SetStop();

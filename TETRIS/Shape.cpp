@@ -1,8 +1,17 @@
-#include "object.h"
+#include "Shape.h"
+#include "DxLib.h"
 
+Shape::Shape():
+	shapes(),
+	randShape()
+{
+}
 
+Shape::~Shape()
+{
+}
 
-void object::setShapeData()
+void Shape::SetShapeData()
 {
 	shapes[SHAPE_T] = {
 		//SHAPE_T,
@@ -12,9 +21,9 @@ void object::setShapeData()
 			3,3,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 			{
-				{0,0,0},
+				{0,1,0},
 				{1,1,1},
-				{0,1,0}
+				{0,0,0}
 			}
 	};
 
@@ -55,10 +64,10 @@ void object::setShapeData()
 			4,4,
 			//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
 			{
-				{0,0,0,0},
-				{1,1,1,1},
-				{0,0,0,0},
-				{0,0,0,0}
+				{0,1,0,0},
+				{0,1,0,0},
+				{0,1,0,0},
+				{0,1,0,0}
 			}
 	};
 
@@ -103,3 +112,11 @@ void object::setShapeData()
 			}
 	};
 }
+
+void Shape::CreatShape()
+{
+
+	randShape = GetRand(SHAPE_MAX);
+
+}
+

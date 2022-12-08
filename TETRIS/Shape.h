@@ -16,26 +16,30 @@ enum {
 	SHAPE_MAX
 };
 
-typedef struct {
+struct ShapeData{
 
 	int color;
 	int height, width;
 	int pattern[SHAPE_WIDTH_MAX][SHAPE_WIDTH_MAX];
 
-}SHAPE;
+};
 
-class object
+class Shape
 {
 private:
 
-	SHAPE shapes[SHAPE_MAX];
+	int randShape;
 
 public:
 
-	object() {}
-	~object() {}
+	ShapeData shapes[SHAPE_MAX];
 
-	void setShapeData();
+	Shape();
+	~Shape();
+
+	void SetShapeData();
+
+	void CreatShape();
 
 };
 
