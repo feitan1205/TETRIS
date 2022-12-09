@@ -23,8 +23,13 @@ GameMain::GameMain()	:
 GameMain::~GameMain() 
 {}
 
+
+/// <summary>
+/// 初期化
+/// </summary>
 void GameMain::Init() {
 	
+	m_waitStop = 1;
 
 	m_movespeed = 1;
 
@@ -35,6 +40,9 @@ void GameMain::Init() {
 	CreatBlock();
 }
 
+/// <summary>
+/// 終了処理
+/// </summary>
 void GameMain::End() {
 
 	for (int i = 0; i < kfieldheight; i++) {
@@ -45,22 +53,57 @@ void GameMain::End() {
 
 }
 
+/// <summary>
+/// ゲームの主な処理と管理
+/// </summary>
+/// <param name="input">キー</param>
 void GameMain::Update(const InputState& input) {
 
 	m_movespeed -= kspeed;
 	
-	CheckRanding();
+	if (!m_stopflag) {
+		m_waitStop = 1;
+	}
 
 	if (m_stopflag) {
+		m_waitStop -= kspeed;
+	}
 
-		if (m_field[4][0].GetIsExist()) {
-			m_isGameOverFlag = true;
+
+	CheckRanding();
+
+	if (input.IsTriggered(InputType::left)) {
+		LeftMoveBlock(0xff0000);
+	}
+	if (input.IsTriggered(InputType::right)) {
+		RightMoveBlock(0xff0000);
+	}
+
+	if (m_waitStop > 0 && m_stopflag) {
+		return;
+	}
+
+	if (m_waitStop < 0 && m_stopflag) {
+
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = 0; j < kfieldwidth; j++) {
+				m_field[j][i].SetStop();
+			}
 		}
 
-		for (int i = kfieldheight - 1 ; i >= 0; i--) {
+		for (int i = 4; i < 7; i++) {
+			if (m_field[i][0].GetIsExist()) {
+				m_isGameOverFlag = true;
+			}
+			if (m_isGameOverFlag) {
+				break;
+			}
+		}
+
+		for (int i = kfieldheight - 1; i >= 0; i--) {
 			for (int j = 0; j < kfieldwidth; j++) {
 				if (!(m_field[j][i].GetIsExist()))break;
-				
+
 				if (j == 9) {
 					ClearBlock(i);
 				}
@@ -68,34 +111,37 @@ void GameMain::Update(const InputState& input) {
 			}
 		}
 
-		CreatBlock();	
+		CheckRanding();
 
-		m_stopflag = false;
 	}
-
-	if (input.IsTriggered(InputType::left)) {
-		LeftMoveBlock(-1, 0, 0xff0000);
-	}
-	if (input.IsTriggered(InputType::right)) {
-		RightMoveBlock(1, 0, 0xff0000);
-	}
-
 	if (input.IsTriggered(InputType::jump)) {
 		JumpBlock(0xff0000);
 	}
 
 	if (input.IsPressed(InputType::fast)) {
-		DownMoveBlock(0, 1, 0xff0000);
+		DownMoveBlock(0xff0000);
 	}
 	else if (!input.IsPressed(InputType::fast)) {
 		if (m_movespeed < 0) {
-			DownMoveBlock(0, 1, 0xff0000);
+			DownMoveBlock(0xff0000);
 			m_movespeed = 1;
 		}
 	}
-	
+
+	if (m_waitStop < 0 && m_stopflag) {
+			CreatBlock();
+
+		m_stopflag = false;
+
+		m_waitStop = 1;
+
+	}
+		
 }
 
+/// <summary>
+/// ゲームの描画処理
+/// </summary>
 void GameMain::Draw() {
 
 	for (int i = 0; i < kfieldheight; i++) {
@@ -105,22 +151,30 @@ void GameMain::Draw() {
 	}
 }
 
-void GameMain::DownMoveBlock(int x, int y, int color)
+/// <summary>
+/// ブロックを下に落とす処理
+/// </summary>
+/// <param name="color">ブロックの色</param>
+void GameMain::DownMoveBlock(int color)
 {
 	for (int i = kfieldheight - 1; i >= 0; i--) {
 		for (int j = 0; j < kfieldwidth; j++) {
 
-			if (m_field[j][i].GetIsMove()) {
+			if (i != 21 && m_field[j][i].GetIsMove()) {
 				m_field[j][i].SetStop();
-				m_field[j + x][i + y].SetBlock(true, color);
-				m_field[j + x][i + y].SetIsMoved(true);
+				m_field[j][i + 1].SetBlock(true, color);
+				m_field[j][i + 1].SetIsMoved(true);
 				m_field[j][i].DeleteExist();
 			}			
 		}
 	}
 }
 
-void GameMain::LeftMoveBlock(int x,int y,int color)
+/// <summary>
+/// ブロックを左に動かす処理
+/// </summary>
+/// <param name="color">ブロックの色</param>
+void GameMain::LeftMoveBlock(int color)
 {	
 
 	for (int i = 0; i < kfieldheight; i++) {
@@ -156,10 +210,10 @@ void GameMain::LeftMoveBlock(int x,int y,int color)
 	if (count == 4) {
 		for (int i = kfieldheight - 1; i >= 0; i--) {
 			for (int j = 0; j < kfieldwidth; j++) {
-				if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
+				if (m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
 					m_field[j][i].SetStop();
-					m_field[j + x][i + y].SetBlock(true,color);
-					m_field[j + x][i + y].SetIsMoved(true);
+					m_field[j - 1][i].SetBlock(true,color);
+					m_field[j - 1][i].SetIsMoved(true);
 					m_field[j][i].DeleteExist();
 				}
 			}
@@ -167,7 +221,11 @@ void GameMain::LeftMoveBlock(int x,int y,int color)
 	}
 }
 
-void GameMain::RightMoveBlock(int x, int y, int color)
+/// <summary>
+/// ブロックを右に動かす処理
+/// </summary>
+/// <param name="color">ブロックの色</param>
+void GameMain::RightMoveBlock(int color)
 {
 
 	for (int i = 0; i < kfieldheight; i++) {
@@ -203,10 +261,10 @@ void GameMain::RightMoveBlock(int x, int y, int color)
 	if (count == 4) {
 		for (int i = kfieldheight - 1; i >= 0; i--) {
 			for (int j = kfieldwidth - 1; j >= 0; j--) {
-				if (i != 21 && m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
+				if (m_field[j][i].GetIsMove() && m_field[j][i].GetIsExist()) {
 					m_field[j][i].SetStop();
-					m_field[j + x][i + y].SetBlock(true,color);
-					m_field[j + x][i + y].SetIsMoved(true);
+					m_field[j + 1][i].SetBlock(true,color);
+					m_field[j + 1][i].SetIsMoved(true);
 					m_field[j][i].DeleteExist();
 				}
 			}
@@ -214,6 +272,10 @@ void GameMain::RightMoveBlock(int x, int y, int color)
 	}
 }
 
+/// <summary>
+/// ブロックを一番下まで飛ばす処理
+/// </summary>
+/// <param name="color">ブロックの色</param>
 void GameMain::JumpBlock(int color)
 {
 	bool isMoveShape = true;	
@@ -236,17 +298,29 @@ void GameMain::JumpBlock(int color)
 				}
 			}
 		}
+
 		CheckRanding();
+
+		if (m_stopflag) {
+			for (int i = kfieldheight - 1; i >= 0; i--) {
+				for (int j = 0; j < kfieldwidth; j++) {
+					m_field[j][i].SetStop();
+				}
+			}
+		}
 	}
 }
 
+/// <summary>
+/// ブロックの生成処理
+/// </summary>
 void GameMain::CreatBlock()
 {
 	m_randShape = GetRand(SHAPE_MAX - 1);
 
-	for (int i = 0; i < 0 + m_shape->shapes[m_randShape][0].height; i++) {
+	for (int i = 0; i < m_shape->shapes[m_randShape][0].height; i++) {
 		for (int j = 0; j < m_shape->shapes[m_randShape][0].width; j++) {
-			if (m_shape->shapes[m_randShape][0].pattern[j][i] == 1) {
+			if (m_shape->shapes[m_randShape][0].pattern[i][j] == 1) {
 				m_field[j + 3][i].SetBlock(true, m_shape->shapes[m_randShape][0].color);
 			}
 		}
@@ -254,6 +328,10 @@ void GameMain::CreatBlock()
 
 }
 
+/// <summary>
+/// ブロックを消す処理
+/// </summary>
+/// <param name="y">消す列の座標</param>
 void GameMain::ClearBlock(int y)
 {
 
@@ -272,8 +350,14 @@ void GameMain::ClearBlock(int y)
 	}
 }
 
+/// <summary>
+/// 着地しているか判定
+/// </summary>
 void GameMain::CheckRanding()
 {
+
+	m_stopflag = false;
+
 	for (int i = kfieldheight - 1; i >= 0; i--) {
 		for (int j = 0; j < kfieldwidth; j++) {
 			if (m_field[j][i].GetIsMove() && i == 21) {
@@ -284,13 +368,5 @@ void GameMain::CheckRanding()
 			}
 		}
 	}
-
-	if (m_stopflag) {
-		for (int i = kfieldheight - 1; i >= 0; i--) {
-			for (int j = 0; j < kfieldwidth; j++) {
-				m_field[j][i].SetStop();
-			}
-		}
-	}
-
+	
 }
