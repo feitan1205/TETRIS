@@ -37,7 +37,6 @@ private:
 
 	Field m_field[10][22];
 	Shape* m_shape;
-	ShapeData *m_moveShape;
 	float m_movespeed;
 	bool m_stopflag;
 	int m_randShape;

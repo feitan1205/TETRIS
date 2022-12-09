@@ -20,6 +20,11 @@ void Field::End() {
 
 }
 
+/// <summary>
+/// フィールドにブロックを生成する。
+/// </summary>
+/// <param name="flag">isMoveBlock</param>
+/// <param name="color">color</param>
 void Field::SetBlock(bool flag,int color)
 {
 	isExistBlock = true;
@@ -27,6 +32,9 @@ void Field::SetBlock(bool flag,int color)
 	blockColor = color;
 }
 
+/// <summary>
+/// フィールドのブロックを削除する。
+/// </summary>
 void Field::DeleteExist()
 {
 	isExistBlock = false;
@@ -38,6 +46,11 @@ void Field::Update() {
 
 }
 
+/// <summary>
+/// フィールドの描画
+/// </summary>
+/// <param name="i">描画するx座標</param>
+/// <param name="j">描画するy座標</param> 
 void Field::Draw(int i,int j) {
 
 	if (isExistBlock) {

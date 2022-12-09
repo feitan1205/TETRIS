@@ -13,7 +13,6 @@ GameMain::GameMain()	:
 	m_field(),
 	m_movespeed(),
 	m_shape(nullptr),
-	m_moveShape(nullptr),
 	m_stopflag(false),
 	m_randShape(),
 	m_isGameOverFlag(false)
@@ -26,16 +25,14 @@ GameMain::~GameMain()
 
 void GameMain::Init() {
 	
-	CreatBlock();
 
 	m_movespeed = 1;
 
 	m_shape = new Shape();
 
-	m_moveShape = new ShapeData;
-
 	m_shape->SetShapeData();
 
+	CreatBlock();
 }
 
 void GameMain::End() {
@@ -70,10 +67,11 @@ void GameMain::Update(const InputState& input) {
 				continue;
 			}
 		}
+
+		CreatBlock();	
+
 		m_stopflag = false;
 	}
-
-	CreatBlock();	
 
 	if (input.IsTriggered(InputType::left)) {
 		LeftMoveBlock(-1, 0, 0xff0000);
@@ -244,9 +242,15 @@ void GameMain::JumpBlock(int color)
 
 void GameMain::CreatBlock()
 {
-	//m_randShape = GetRand(SHAPE_MAX);
+	m_randShape = GetRand(SHAPE_MAX - 1);
 
-	m_moveShape = m_shape->GetShape();
+	for (int i = 0; i < 0 + m_shape->shapes[m_randShape][0].height; i++) {
+		for (int j = 0; j < m_shape->shapes[m_randShape][0].width; j++) {
+			if (m_shape->shapes[m_randShape][0].pattern[j][i] == 1) {
+				m_field[j + 3][i].SetBlock(true, m_shape->shapes[m_randShape][0].color);
+			}
+		}
+	}
 
 }
 
@@ -270,7 +274,6 @@ void GameMain::ClearBlock(int y)
 
 void GameMain::CheckRanding()
 {
-
 	for (int i = kfieldheight - 1; i >= 0; i--) {
 		for (int j = 0; j < kfieldwidth; j++) {
 			if (m_field[j][i].GetIsMove() && i == 21) {
