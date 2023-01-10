@@ -14,6 +14,7 @@ GameMain::GameMain()	:
 	m_movespeed(),
 	m_shape(nullptr),
 	m_stopflag(false),
+	m_waitStop(),
 	m_randShape(),
 	m_isGameOverFlag(false)
 {
@@ -69,7 +70,6 @@ void GameMain::Update(const InputState& input) {
 		m_waitStop -= kspeed;
 	}
 
-
 	CheckRanding();
 
 	if (input.IsTriggered(InputType::left)) {
@@ -114,6 +114,7 @@ void GameMain::Update(const InputState& input) {
 		CheckRanding();
 
 	}
+
 	if (input.IsTriggered(InputType::jump)) {
 		JumpBlock(0xff0000);
 	}
@@ -129,7 +130,8 @@ void GameMain::Update(const InputState& input) {
 	}
 
 	if (m_waitStop < 0 && m_stopflag) {
-			CreatBlock();
+
+		CreatBlock();
 
 		m_stopflag = false;
 
