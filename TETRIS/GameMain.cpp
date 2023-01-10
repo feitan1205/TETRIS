@@ -113,6 +113,12 @@ void GameMain::Update(const InputState& input) {
 
 		CheckRanding();
 
+		CreatBlock();
+
+		m_stopflag = false;
+
+		m_waitStop = 1;
+
 	}
 
 	if (input.IsTriggered(InputType::jump)) {
@@ -129,15 +135,10 @@ void GameMain::Update(const InputState& input) {
 		}
 	}
 
-	if (m_waitStop < 0 && m_stopflag) {
+	/*if (m_waitStop < 0 && m_stopflag) {
 
-		CreatBlock();
-
-		m_stopflag = false;
-
-		m_waitStop = 1;
-
-	}
+		
+	}*/
 		
 }
 
