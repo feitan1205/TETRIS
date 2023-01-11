@@ -407,6 +407,10 @@ void GameMain::SpinBlock()
 		m_blockX--;
 	}
 
+	while (m_blockX + m_shape->shapes[m_randShape][m_blockvec].height > 21) {
+		m_blockY--;
+	}
+
 	for (int i = 0; i < m_shape->shapes[m_randShape][m_blockvec].height; i++) {
 		for (int j = 0; j < m_shape->shapes[m_randShape][m_blockvec].width; j++) {
 			if (m_shape->shapes[m_randShape][m_blockvec].pattern[i][j] == 1) {
