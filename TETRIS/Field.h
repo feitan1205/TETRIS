@@ -18,12 +18,13 @@ public:
 
 	void Update();
 
-	void Draw(int i,int j);
+	void Draw(int i,int j,int color);
 
 	bool GetIsExist() { return isExistBlock; }
 	bool GetIsMove() { return isMoveBlock; }
 	void SetIsMoved(bool flag) { isMovedBlock = flag; }
 	bool GetIsMoved() { return isMovedBlock; }
+	int GetColor() { return blockColor; }
 	void SetStop() { isMoveBlock = false; }
 private:
 

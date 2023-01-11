@@ -18,7 +18,7 @@ void Shape::SetShapeData()
 	/// </summary>
 	shapes[SHAPE_T][0] = {
 		//color
-		0xff0000,
+		0xa260bf,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -30,7 +30,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_T][1] = {
 		//color
-		0xff0000,
+		0xa260bf,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -42,7 +42,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_T][2] = {
 		//color
-		0xff0000,
+		0xa260bf,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -54,7 +54,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_T][3] = {
 		//color
-		0xff0000,
+		0xa260bf,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -70,7 +70,7 @@ void Shape::SetShapeData()
 	/// </summary>
 	shapes[SHAPE_L][0] = {
 		//color
-		0xff0000,
+		0xfd7e00,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -82,7 +82,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_L][1] = {
 		//color
-		0xff0000,
+		0xfd7e00,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -94,7 +94,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_L][2] = {
 		//color
-		0xff0000,
+		0xfd7e00,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -106,7 +106,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_L][3] = {
 		//color
-		0xff0000,
+		0xfd7e00,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -122,7 +122,7 @@ void Shape::SetShapeData()
 	/// </summary>
 	shapes[SHAPE_J][0] = {
 		//color
-		0xff0000,
+		0x0000ff,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -134,7 +134,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_J][1] = {
 		//color
-		0xff0000,
+		0x0000ff,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -146,7 +146,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_J][2] = {
 		//color
-		0xff0000,
+		0x0000ff,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -158,7 +158,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_J][3] = {
 		//color
-		0xff0000,
+		0x0000ff,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -174,7 +174,7 @@ void Shape::SetShapeData()
 	/// </summary>
 	shapes[SHAPE_I][0] = {
 		//color
-		0xff0000,
+		0xa9ceec,
 		//height,width
 		4,4,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -187,7 +187,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_I][1] = {
 		//color
-		0xff0000,
+		0xa9ceec,
 		//height,width
 		4,4,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -200,7 +200,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_I][2] = {
 		//color
-		0xff0000,
+		0xa9ceec,
 		//height,width
 		4,4,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -213,7 +213,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_I][3] = {
 		//color
-		0xff0000,
+		0xa9ceec,
 		//height,width
 		4,4,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -232,7 +232,7 @@ void Shape::SetShapeData()
 		shapes[SHAPE_O][i] = {
 			//SHAPE_O,
 			//color
-				0xff0000,
+				0xffff00,
 				//height,width
 				2,2,
 				//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -248,7 +248,7 @@ void Shape::SetShapeData()
 	/// </summary>
 	shapes[SHAPE_S][0] = {
 		//color
-		0xff0000,
+		0xb9c42f,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -260,7 +260,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_S][1] = {
 		//color
-		0xff0000,
+		0xb9c42f,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -272,7 +272,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_S][2] = {
 		//color
-		0xff0000,
+		0xb9c42f,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];
@@ -284,7 +284,7 @@ void Shape::SetShapeData()
 	};
 	shapes[SHAPE_S][3] = {
 		//color
-		0xff0000,
+		0xb9c42f,
 		//height,width
 		3,3,
 		//int pattern[SHAPE_HEIGHT_MAX][SHAPE_WIDTH_MAX];

@@ -51,13 +51,13 @@ void Field::Update() {
 /// </summary>
 /// <param name="i">ï`âÊÇ∑ÇÈxç¿ïW</param>
 /// <param name="j">ï`âÊÇ∑ÇÈyç¿ïW</param> 
-void Field::Draw(int i,int j) {
+void Field::Draw(int i,int j,int color) {
 
 	if (isExistBlock) {
 		DrawBox(j * 16, i * 16, j * 16 + 16, i * 16 + 16, blockColor, isExistBlock);
-		DrawBox(j * 16, i * 16, j * 16 + 16, i * 16 + 16, GetColor(0, 0, 0), false);
+		DrawBox(j * 16, i * 16, j * 16 + 16, i * 16 + 16, 0x000000, false);
 	}
 	else {
-		DrawBox(j * 16, i * 16, j * 16 + 16, i * 16 + 16, GetColor(255, 255, 255), isExistBlock);
+		DrawBox(j * 16, i * 16, j * 16 + 16, i * 16 + 16, 0xffffff, isExistBlock);
 	}
 }

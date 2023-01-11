@@ -48,5 +48,9 @@ bool InputState::IsTriggered(InputType type)const {
 		return !lastKeystate[KEY_INPUT_SPACE] &&
 			keystate[KEY_INPUT_SPACE];
 	}
+	if (type == InputType::spin) {
+		return !lastKeystate[KEY_INPUT_UP] &&
+			keystate[KEY_INPUT_UP];
+	}
 	return false;
 }

@@ -33,10 +33,16 @@ public:
 
 	bool GetGameOver() { return m_isGameOverFlag; }
 
+	void SpinBlock();
+
 private:
 
 	Field m_field[10][22];
 	Shape* m_shape;
+	int color;
+	int m_blockvec;
+	int m_blockX;
+	int m_blockY;
 	float m_movespeed;
 	float m_waitStop;
 	bool m_stopflag;

@@ -73,10 +73,18 @@ void GameMain::Update(const InputState& input) {
 	CheckRanding();
 
 	if (input.IsTriggered(InputType::left)) {
-		LeftMoveBlock(0xff0000);
+		LeftMoveBlock(color);
+		m_blockX--;
 	}
-	if (input.IsTriggered(InputType::right)) {
-		RightMoveBlock(0xff0000);
+	else if (input.IsTriggered(InputType::right)) {
+		RightMoveBlock(color);
+		m_blockX++;
+	}
+	else if (input.IsTriggered(InputType::jump)) {
+		JumpBlock(color);
+	}
+	else if (input.IsTriggered(InputType::spin)) {
+		SpinBlock();
 	}
 
 	if (m_waitStop > 0 && m_stopflag) {
@@ -106,6 +114,7 @@ void GameMain::Update(const InputState& input) {
 
 				if (j == 9) {
 					ClearBlock(i);
+					i++;
 				}
 				continue;
 			}
@@ -119,27 +128,21 @@ void GameMain::Update(const InputState& input) {
 
 		m_waitStop = 1;
 
-	}
-
-	if (input.IsTriggered(InputType::jump)) {
-		JumpBlock(0xff0000);
+		return;
 	}
 
 	if (input.IsPressed(InputType::fast)) {
-		DownMoveBlock(0xff0000);
+		DownMoveBlock(color);
+		m_blockY++;
 	}
 	else if (!input.IsPressed(InputType::fast)) {
 		if (m_movespeed < 0) {
-			DownMoveBlock(0xff0000);
+			DownMoveBlock(color);
+			m_blockY++;
 			m_movespeed = 1;
 		}
 	}
 
-	/*if (m_waitStop < 0 && m_stopflag) {
-
-		
-	}*/
-		
 }
 
 /// <summary>
@@ -149,7 +152,7 @@ void GameMain::Draw() {
 
 	for (int i = 0; i < kfieldheight; i++) {
 		for (int j = 0; j < kfieldwidth; j++) {
-			m_field[j][i].Draw(i,j);
+			m_field[j][i].Draw(i,j,color);
 		}
 	}
 }
@@ -312,6 +315,11 @@ void GameMain::JumpBlock(int color)
 			}
 		}
 	}
+
+	m_stopflag = true;
+
+	m_waitStop = -1;
+	
 }
 
 /// <summary>
@@ -320,15 +328,19 @@ void GameMain::JumpBlock(int color)
 void GameMain::CreatBlock()
 {
 	m_randShape = GetRand(SHAPE_MAX - 1);
+	m_blockvec = 0;
 
-	for (int i = 0; i < m_shape->shapes[m_randShape][0].height; i++) {
-		for (int j = 0; j < m_shape->shapes[m_randShape][0].width; j++) {
-			if (m_shape->shapes[m_randShape][0].pattern[i][j] == 1) {
-				m_field[j + 3][i].SetBlock(true, m_shape->shapes[m_randShape][0].color);
+	for (int i = 0; i < m_shape->shapes[m_randShape][m_blockvec].height; i++) {
+		for (int j = 0; j < m_shape->shapes[m_randShape][m_blockvec].width; j++) {
+			if (m_shape->shapes[m_randShape][m_blockvec].pattern[i][j] == 1) {
+				m_field[j + 3][i].SetBlock(true, m_shape->shapes[m_randShape][m_blockvec].color);
 			}
 		}
 	}
 
+	color = m_shape->shapes[m_randShape][0].color;
+	m_blockX = 3;
+	m_blockY = 0;
 }
 
 /// <summary>
@@ -346,7 +358,7 @@ void GameMain::ClearBlock(int y)
 		for (int j = 0; j < kfieldwidth; j++) {
 
 			if (i != 21 && m_field[j][i].GetIsExist()) {
-				m_field[j][i + 1].SetBlock(false,0xff0000);
+				m_field[j][i + 1].SetBlock(false, m_field[j][i].GetColor());
 				m_field[j][i].DeleteExist();
 			}
 		}
@@ -373,3 +385,54 @@ void GameMain::CheckRanding()
 	}
 	
 }
+
+void GameMain::SpinBlock()
+{
+
+	for (int i = 0; i < kfieldheight; i++) {
+		for (int j = 0; j < kfieldwidth; j++) {
+			if (m_field[j][i].GetIsMove()) {
+				m_field[j][i].DeleteExist();
+			}
+		}
+	}
+
+	m_blockvec++;
+
+	if (m_blockvec == 4) {
+		m_blockvec = 0;
+	}
+
+	while (m_blockX + m_shape->shapes[m_randShape][m_blockvec].width > 10) {
+		m_blockX--;
+	}
+
+	for (int i = 0; i < m_shape->shapes[m_randShape][m_blockvec].height; i++) {
+		for (int j = 0; j < m_shape->shapes[m_randShape][m_blockvec].width; j++) {
+			if (m_shape->shapes[m_randShape][m_blockvec].pattern[i][j] == 1) {
+				if (m_field[j + m_blockX][i + m_blockY].GetIsExist()) {
+					if ((m_shape->shapes[m_randShape][m_blockvec].width) / 2 > j) {
+						m_blockX++;
+					}
+					else if((m_shape->shapes[m_randShape][m_blockvec].width) / 2 < j) {
+						m_blockX--;
+					}
+				}
+			}
+		}
+	}
+
+	if (m_blockX < 0) {
+		m_blockX = 0;
+	}
+
+	for (int i = 0; i < m_shape->shapes[m_randShape][m_blockvec].height; i++) {
+		for (int j = 0; j < m_shape->shapes[m_randShape][m_blockvec].width; j++) {
+			if (m_shape->shapes[m_randShape][m_blockvec].pattern[i][j] == 1) {
+				m_field[j + m_blockX][i + m_blockY].SetBlock(true, m_shape->shapes[m_randShape][m_blockvec].color);
+			}
+		}
+	}
+
+}
+
