@@ -6,7 +6,8 @@ enum class InputType {
 	right,
 	fast,
 	jump,
-	spin
+	spin,
+	hold
 };
 
 class InputState

@@ -54,10 +54,10 @@ void Field::Update() {
 void Field::Draw(int i,int j,int color) {
 
 	if (isExistBlock) {
-		DrawBox(j * 16 + 200, i * 16 + 100, j * 16 + 16 + 200, i * 16 + 16 + 100, blockColor, isExistBlock);
-		DrawBox(j * 16 + 200, i * 16 + 100, j * 16 + 16 + 200, i * 16 + 16 + 100, 0x000000, false);
+		DrawBox(j * 16 + 250, i * 16 + 100, j * 16 + 16 + 250, i * 16 + 16 + 100, blockColor, isExistBlock);
+		DrawBox(j * 16 + 250, i * 16 + 100, j * 16 + 16 + 250, i * 16 + 16 + 100, 0x000000, false);
 	}
 	else {
-		DrawBox(j * 16 + 200, i * 16 + 100, j * 16 + 16 + 200, i * 16 + 16 + 100, 0xffffff, isExistBlock);
+		DrawBox(j * 16 + 250, i * 16 + 100, j * 16 + 16 + 250, i * 16 + 16 + 100, 0xffffff, isExistBlock);
 	}
 }

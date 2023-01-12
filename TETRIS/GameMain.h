@@ -35,6 +35,8 @@ public:
 
 	void SpinBlock();
 
+	void HoldBlock();
+
 private:
 
 	Field m_field[10][22];
@@ -46,6 +48,9 @@ private:
 	float m_movespeed;
 	float m_waitStop;
 	bool m_stopflag;
-	int m_randShape;
+	int m_randShape[6];
 	bool m_isGameOverFlag;
+	int m_holdShape;
+	bool m_ishold;
+	bool m_isholded;
 };

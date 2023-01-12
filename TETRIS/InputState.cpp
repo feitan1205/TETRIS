@@ -52,5 +52,9 @@ bool InputState::IsTriggered(InputType type)const {
 		return !lastKeystate[KEY_INPUT_UP] &&
 			keystate[KEY_INPUT_UP];
 	}
+	if (type == InputType::hold) {
+		return !lastKeystate[KEY_INPUT_C] &&
+			keystate[KEY_INPUT_C];
+	}
 	return false;
 }

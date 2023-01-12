@@ -9,14 +9,15 @@ namespace {
 	constexpr float kspeed = 0.05f;
 }
 
-GameMain::GameMain()	:
+GameMain::GameMain() :
 	m_field(),
 	m_movespeed(),
 	m_shape(nullptr),
 	m_stopflag(false),
 	m_waitStop(),
 	m_randShape(),
-	m_isGameOverFlag(false)
+	m_isGameOverFlag(false),
+	m_ishold(false)
 {
 	//ˆ—‚È‚µ
 }
@@ -37,6 +38,10 @@ void GameMain::Init() {
 	m_shape = new Shape();
 
 	m_shape->SetShapeData();
+
+	for (int i = 0; i < 6; i++) {
+		m_randShape[i] = GetRand(SHAPE_MAX - 1);
+	}
 
 	CreatBlock();
 }
@@ -71,6 +76,11 @@ void GameMain::Update(const InputState& input) {
 	}
 
 	CheckRanding();
+
+	if (input.IsTriggered(InputType::hold) && !m_isholded) {
+		HoldBlock();
+		m_isholded = true;
+	}
 
 	if (input.IsTriggered(InputType::left)) {
 		LeftMoveBlock(color);
@@ -126,6 +136,8 @@ void GameMain::Update(const InputState& input) {
 
 		m_stopflag = false;
 
+		m_isholded = false;
+
 		m_waitStop = 1;
 
 		return;
@@ -155,6 +167,41 @@ void GameMain::Draw() {
 			m_field[j][i].Draw(i,j,color);
 		}
 	}
+
+	DrawBox(500, 110, 600, 450, 0xffffff, false);
+
+	for (int k = 1; k <= 5; k++) {
+
+		for (int i = 0; i < m_shape->shapes[m_randShape[k]][0].height; i++) {
+			for (int j = 0; j < m_shape->shapes[m_randShape[k]][0].width; j++) {
+				if (m_shape->shapes[m_randShape[k]][0].pattern[i][j] == 0) {
+					continue;
+				}
+				else if (m_shape->shapes[m_randShape[k]][0].pattern[i][j] == 1) {
+					DrawBox(j * 12 + 520, i * 12 + 80 + k * 60, j * 12 + 12 + 520, i * 12 + 12 + 80 + k * 60, m_shape->shapes[m_randShape[k]][m_blockvec].color, true);
+					DrawBox(j * 12 + 520, i * 12 + 80 + k * 60, j * 12 + 12 + 520, i * 12 + 12 + 80 + k * 60, 0x000000, false);
+				}
+			}
+		}
+
+	}
+
+	DrawBox(100, 100, 200, 200, 0xffffff, false);
+
+	if (m_ishold) {
+		for (int i = 0; i < m_shape->shapes[m_holdShape][0].height; i++) {
+			for (int j = 0; j < m_shape->shapes[m_holdShape][0].width; j++) {
+				if (m_shape->shapes[m_holdShape][0].pattern[i][j] == 0) {
+					continue;
+				}
+				else if (m_shape->shapes[m_holdShape][0].pattern[i][j] == 1) {
+					DrawBox(j * 12 + 120, i * 12 + 120, j * 12 + 12 + 120, i * 12 + 12 + 120, m_shape->shapes[m_holdShape][m_blockvec].color, true);
+					DrawBox(j * 12 + 120, i * 12 + 120, j * 12 + 12 + 120, i * 12 + 12 + 120, 0x000000, false);
+				}
+			}
+		}
+	}
+
 }
 
 /// <summary>
@@ -334,20 +381,27 @@ void GameMain::JumpBlock(int color)
 void GameMain::CreatBlock()
 {
 	//GetRand(SHAPE_MAX - 1)
-	m_randShape = GetRand(SHAPE_MAX - 1);
+
+	for (int i = 0; i < 5; i++) {
+		m_randShape[i] = m_randShape[i + 1];
+	}
+	
 	m_blockvec = 0;
 
-	for (int i = 0; i < m_shape->shapes[m_randShape][m_blockvec].height; i++) {
-		for (int j = 0; j < m_shape->shapes[m_randShape][m_blockvec].width; j++) {
-			if (m_shape->shapes[m_randShape][m_blockvec].pattern[i][j] == 1) {
-				m_field[j + 3][i].SetBlock(true, m_shape->shapes[m_randShape][m_blockvec].color);
+	for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
+		for (int j = 0; j < m_shape->shapes[m_randShape[0]][m_blockvec].width; j++) {
+			if (m_shape->shapes[m_randShape[0]][m_blockvec].pattern[i][j] == 1) {
+				m_field[j + 3][i].SetBlock(true, m_shape->shapes[m_randShape[0]][m_blockvec].color);
 			}
 		}
 	}
 
-	color = m_shape->shapes[m_randShape][0].color;
+	color = m_shape->shapes[m_randShape[0]][0].color;
 	m_blockX = 3;
 	m_blockY = 0;
+
+	m_randShape[5] = GetRand(SHAPE_MAX - 1);
+
 }
 
 /// <summary>
@@ -410,22 +464,22 @@ void GameMain::SpinBlock()
 		m_blockvec = 0;
 	}
 
-	while (m_blockX + m_shape->shapes[m_randShape][m_blockvec].width > 10) {
+	while (m_blockX + m_shape->shapes[m_randShape[0]][m_blockvec].width > 10) {
 		m_blockX--;
 	}
 
-	while (m_blockX + m_shape->shapes[m_randShape][m_blockvec].height > 21) {
+	while (m_blockX + m_shape->shapes[m_randShape[0]][m_blockvec].height > 21) {
 		m_blockY--;
 	}
 
-	for (int i = 0; i < m_shape->shapes[m_randShape][m_blockvec].height; i++) {
-		for (int j = 0; j < m_shape->shapes[m_randShape][m_blockvec].width; j++) {
-			if (m_shape->shapes[m_randShape][m_blockvec].pattern[i][j] == 1) {
+	for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
+		for (int j = 0; j < m_shape->shapes[m_randShape[0]][m_blockvec].width; j++) {
+			if (m_shape->shapes[m_randShape[0]][m_blockvec].pattern[i][j] == 1) {
 				if (m_field[j + m_blockX][i + m_blockY].GetIsExist()) {
-					if ((m_shape->shapes[m_randShape][m_blockvec].width) / 2 > j - 1) {
+					if ((m_shape->shapes[m_randShape[0]][m_blockvec].width) / 2 > j - 1) {
 						m_blockX++;
 					}
-					else if((m_shape->shapes[m_randShape][m_blockvec].width) / 2 < j + 1) {
+					else if((m_shape->shapes[m_randShape[0]][m_blockvec].width) / 2 < j + 1) {
 						m_blockX--;
 					}
 				}
@@ -437,12 +491,63 @@ void GameMain::SpinBlock()
 		m_blockX = 0;
 	}
 
-	for (int i = 0; i < m_shape->shapes[m_randShape][m_blockvec].height; i++) {
-		for (int j = 0; j < m_shape->shapes[m_randShape][m_blockvec].width; j++) {
-			if (m_shape->shapes[m_randShape][m_blockvec].pattern[i][j] == 1) {
-				m_field[j + m_blockX][i + m_blockY].SetBlock(true, m_shape->shapes[m_randShape][m_blockvec].color);
+	for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
+		for (int j = 0; j < m_shape->shapes[m_randShape[0]][m_blockvec].width; j++) {
+			if (m_shape->shapes[m_randShape[0]][m_blockvec].pattern[i][j] == 1) {
+				m_field[j + m_blockX][i + m_blockY].SetBlock(true, m_shape->shapes[m_randShape[0]][m_blockvec].color);
 			}
 		}
+	}
+
+}
+
+void GameMain::HoldBlock()
+{
+	if (!m_ishold) {
+
+		m_holdShape = m_randShape[0];
+
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = 0; j < kfieldwidth; j++) {
+				if (m_field[j][i].GetIsMove()) {
+					m_field[j][i].DeleteExist();
+				}
+			}
+		}
+
+		CreatBlock();
+
+		m_ishold = true;
+
+		return;
+	}
+
+	int tmpShape = 99;
+
+	if (m_ishold) {
+		tmpShape = m_holdShape;
+		m_holdShape = m_randShape[0];
+		m_randShape[0] = tmpShape;
+
+		for (int i = kfieldheight - 1; i >= 0; i--) {
+			for (int j = 0; j < kfieldwidth; j++) {
+				if (m_field[j][i].GetIsMove()) {
+					m_field[j][i].DeleteExist();
+				}
+			}
+		}
+
+		for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
+			for (int j = 0; j < m_shape->shapes[m_randShape[0]][m_blockvec].width; j++) {
+				if (m_shape->shapes[m_randShape[0]][m_blockvec].pattern[i][j] == 1) {
+					m_field[j + 3][i].SetBlock(true, m_shape->shapes[m_randShape[0]][m_blockvec].color);
+				}
+			}
+		}
+
+		color = m_shape->shapes[m_randShape[0]][0].color;
+		m_blockX = 3;
+		m_blockY = 0;
 	}
 
 }
