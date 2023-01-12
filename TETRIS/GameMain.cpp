@@ -286,6 +286,12 @@ void GameMain::JumpBlock(int color)
 {
 	bool isMoveShape = true;	
 
+	CheckRanding();
+
+	if (m_stopflag) {
+		return;
+	}
+
 	while (isMoveShape) {
 		isMoveShape = false;
 		for (int i = 0; i < kfieldheight; i++) {
@@ -327,6 +333,7 @@ void GameMain::JumpBlock(int color)
 /// </summary>
 void GameMain::CreatBlock()
 {
+	//GetRand(SHAPE_MAX - 1)
 	m_randShape = GetRand(SHAPE_MAX - 1);
 	m_blockvec = 0;
 
@@ -415,10 +422,10 @@ void GameMain::SpinBlock()
 		for (int j = 0; j < m_shape->shapes[m_randShape][m_blockvec].width; j++) {
 			if (m_shape->shapes[m_randShape][m_blockvec].pattern[i][j] == 1) {
 				if (m_field[j + m_blockX][i + m_blockY].GetIsExist()) {
-					if ((m_shape->shapes[m_randShape][m_blockvec].width) / 2 > j) {
+					if ((m_shape->shapes[m_randShape][m_blockvec].width) / 2 > j - 1) {
 						m_blockX++;
 					}
-					else if((m_shape->shapes[m_randShape][m_blockvec].width) / 2 < j) {
+					else if((m_shape->shapes[m_randShape][m_blockvec].width) / 2 < j + 1) {
 						m_blockX--;
 					}
 				}
