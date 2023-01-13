@@ -526,6 +526,12 @@ void GameMain::SpinBlock()
 		}
 	}
 
+	for (int j = m_shape->shapes[m_randShape[0]][m_blockvec].width / 2 - 1; j >= 0; j--) {
+		for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
+
+		}
+	}
+
 	bool cantput = false;
 
 	for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
