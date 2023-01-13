@@ -41,7 +41,7 @@ private:
 
 	Field m_field[10][22];
 	Shape* m_shape;
-	int color;
+	int m_color;
 	int m_blockvec;
 	int m_blockX;
 	int m_blockY;
@@ -53,4 +53,7 @@ private:
 	int m_holdShape;
 	bool m_ishold;
 	bool m_isholded;
+	int m_score;
+	int m_clearnum;
+
 };

@@ -11,20 +11,27 @@ namespace {
 
 GameMain::GameMain() :
 	m_field(),
-	m_movespeed(),
 	m_shape(nullptr),
-	m_stopflag(false),
+	m_color(),
+	m_blockvec(),
+	m_blockX(),
+	m_blockY(),
+	m_movespeed(),
 	m_waitStop(),
+	m_stopflag(false),
 	m_randShape(),
 	m_isGameOverFlag(false),
-	m_ishold(false)
+	m_holdShape(),
+	m_ishold(false),
+	m_isholded(false),
+	m_score(),
+	m_clearnum()
 {
 	//処理なし
 }
 
 GameMain::~GameMain() 
 {}
-
 
 /// <summary>
 /// 初期化
@@ -83,15 +90,15 @@ void GameMain::Update(const InputState& input) {
 	}
 
 	if (input.IsTriggered(InputType::left)) {
-		LeftMoveBlock(color);
+		LeftMoveBlock(m_color);
 		m_blockX--;
 	}
 	else if (input.IsTriggered(InputType::right)) {
-		RightMoveBlock(color);
+		RightMoveBlock(m_color);
 		m_blockX++;
 	}
 	else if (input.IsTriggered(InputType::jump)) {
-		JumpBlock(color);
+		JumpBlock(m_color);
 	}
 	else if (input.IsTriggered(InputType::spin)) {
 		SpinBlock();
@@ -124,6 +131,7 @@ void GameMain::Update(const InputState& input) {
 
 				if (j == 9) {
 					ClearBlock(i);
+					m_clearnum++;
 					i++;
 				}
 				continue;
@@ -132,7 +140,22 @@ void GameMain::Update(const InputState& input) {
 
 		CheckRanding();
 
+		if (m_clearnum == 1) {
+			m_score += 300;
+		}
+		if (m_clearnum == 2) {
+			m_score += 800;
+		}
+		if (m_clearnum == 3) {
+			m_score += 1200;
+		}
+		if (m_clearnum == 4) {
+			m_score += 2000;
+		}
+
 		CreatBlock();
+
+		m_clearnum = 0;
 
 		m_stopflag = false;
 
@@ -144,12 +167,12 @@ void GameMain::Update(const InputState& input) {
 	}
 
 	if (input.IsPressed(InputType::fast)) {
-		DownMoveBlock(color);
+		DownMoveBlock(m_color);
 		m_blockY++;
 	}
 	else if (!input.IsPressed(InputType::fast)) {
 		if (m_movespeed < 0) {
-			DownMoveBlock(color);
+			DownMoveBlock(m_color);
 			m_blockY++;
 			m_movespeed = 1;
 		}
@@ -164,7 +187,7 @@ void GameMain::Draw() {
 
 	for (int i = 0; i < kfieldheight; i++) {
 		for (int j = 0; j < kfieldwidth; j++) {
-			m_field[j][i].Draw(i,j,color);
+			m_field[j][i].Draw(i,j,m_color);
 		}
 	}
 
@@ -201,6 +224,8 @@ void GameMain::Draw() {
 			}
 		}
 	}
+
+	DrawFormatString(500, 550, 0xffffff, "score：%d", m_score, false);
 
 }
 
@@ -396,7 +421,7 @@ void GameMain::CreatBlock()
 		}
 	}
 
-	color = m_shape->shapes[m_randShape[0]][0].color;
+	m_color = m_shape->shapes[m_randShape[0]][0].color;
 	m_blockX = 3;
 	m_blockY = 0;
 
@@ -424,6 +449,7 @@ void GameMain::ClearBlock(int y)
 			}
 		}
 	}
+
 }
 
 /// <summary>
@@ -447,6 +473,9 @@ void GameMain::CheckRanding()
 	
 }
 
+/// <summary>
+/// ブロックを回転させる処理
+/// </summary>
 void GameMain::SpinBlock()
 {
 
@@ -457,6 +486,10 @@ void GameMain::SpinBlock()
 			}
 		}
 	}
+
+	int tmpblockvec = m_blockvec;
+	int tmpblockX = m_blockX;
+	int tmpblockY = m_blockY;
 
 	m_blockvec++;
 
@@ -473,18 +506,40 @@ void GameMain::SpinBlock()
 	}
 
 	for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
-		for (int j = 0; j < m_shape->shapes[m_randShape[0]][m_blockvec].width; j++) {
+		for (int j = m_shape->shapes[m_randShape[0]][m_blockvec].width/ 2 ; j < m_shape->shapes[m_randShape[0]][m_blockvec].width; j++) {
 			if (m_shape->shapes[m_randShape[0]][m_blockvec].pattern[i][j] == 1) {
 				if (m_field[j + m_blockX][i + m_blockY].GetIsExist()) {
-					if ((m_shape->shapes[m_randShape[0]][m_blockvec].width) / 2 > j - 1) {
-						m_blockX++;
-					}
-					else if((m_shape->shapes[m_randShape[0]][m_blockvec].width) / 2 < j + 1) {
-						m_blockX--;
-					}
+					m_blockX--;
 				}
 			}
 		}
+	}
+
+
+	for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
+		for (int j = m_shape->shapes[m_randShape[0]][m_blockvec].width / 2 - 1 ; j >= 0; j--) {
+			if (m_shape->shapes[m_randShape[0]][m_blockvec].pattern[i][j] == 1) {
+				if (m_field[j + m_blockX][i + m_blockY].GetIsExist()) {
+					m_blockX++;
+				}
+			}
+		}
+	}
+
+	bool cantput = false;
+
+	for (int i = 0; i < m_shape->shapes[m_randShape[0]][m_blockvec].height; i++) {
+		for (int j = 0; j < m_shape->shapes[m_randShape[0]][m_blockvec].width; j++) {
+			if (m_field[j + m_blockX][i + m_blockY].GetIsExist()) {
+				cantput = true;
+			}
+		}
+	}
+
+	if (cantput) {
+		m_blockvec = tmpblockvec;
+		m_blockX = tmpblockX;
+		m_blockY = tmpblockY;
 	}
 
 	if (m_blockX < 0) {
@@ -501,6 +556,9 @@ void GameMain::SpinBlock()
 
 }
 
+/// <summary>
+/// ブロックをホールドする処理
+/// </summary>
 void GameMain::HoldBlock()
 {
 	if (!m_ishold) {
@@ -545,7 +603,7 @@ void GameMain::HoldBlock()
 			}
 		}
 
-		color = m_shape->shapes[m_randShape[0]][0].color;
+		m_color = m_shape->shapes[m_randShape[0]][0].color;
 		m_blockX = 3;
 		m_blockY = 0;
 	}
